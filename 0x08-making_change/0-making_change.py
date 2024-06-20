@@ -1,26 +1,26 @@
 #!/usr/bin/python3
 """
 Interview Question on: fewest number of coins needed to
-meet a given amount total
+meet a given amount total using greedy method
 """
 
-
 def makeChange(coins, total):
-    """ Return the fewest number of coins needed to meet total """
+    """ Return the fewest number of coins needed to meet total using a greedy method """
     if total <= 0:
         return 0
 
-    # Initialize a list to store the minimum coins needed for each
-    # amount up to total
-    min_coins = [float('inf')] * (total + 1)
-    min_coins[0] = 0
-
-    # Iterate through each coin and update the min_coins list
+    # Sort the coins in descending order
+    coins.sort(reverse=True)
+    
+    count = 0
     for coin in coins:
-        for amount in range(coin, total + 1):
-            min_coins[amount] = min(min_coins[amount],
-                                    min_coins[amount - coin] + 1)
+        if total == 0:
+            break
+        # Use as many of the current coin as possible
+        num_coins = total // coin
+        count += num_coins
+        total -= num_coins * coin
 
-    # If min_coins[total] is still float('inf'), it means we cannot make
-    # the total with the given coins
-    return min_coins[total] if min_coins[total] != float('inf') else -1
+    # If we are left with an amount that is not zero,
+    # we cannot make the total with the given coins
+    return count if total == 0 else -1
